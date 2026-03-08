@@ -3,6 +3,12 @@ using UnityEngine;
 public class ArmGrappleR : MonoBehaviour
 {
     [SerializeField] private ArmTracking ArmTracking;
+    private OrbStatus Orb;
+
+    private void Start()
+    {
+        Orb = FindFirstObjectByType<OrbStatus>();
+    }
 
     void Update()
     {
@@ -25,7 +31,12 @@ public class ArmGrappleR : MonoBehaviour
         if (collision.CompareTag("Grabbable") && ArmTracking.RArmGrapple)
         {
             ArmTracking.AnchorRArm();
-            print("Right Armmmmmm");
+        }
+
+        // Collecter l'orbe avec le bras droit
+        if (collision.CompareTag("Orb"))
+        {
+            Orb.OrbCollect();
         }
     }
 }

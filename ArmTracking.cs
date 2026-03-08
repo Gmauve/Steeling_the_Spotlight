@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.WSA;
 
 public class ArmTracking : MonoBehaviour
 {
@@ -9,32 +8,20 @@ public class ArmTracking : MonoBehaviour
     // Variables de la mecanique de grappin
     [SerializeField] private Camera mainCamera;
     private Vector3 mousePos;
-    public bool LArmGrapple;
-    public bool RArmGrapple;
-    public bool LAnchor;
-    public bool RAnchor;
+    public bool LArmGrapple, RArmGrapple;
+    public bool LAnchor, RAnchor;
 
     // Variables de positionnement du bras gauche
     private Vector3 LArmOrigin;
-    private float LPosX;
-    private float LPosY;
-    private float LRotX;
-    private float LRotY;
-    private float LRotZ;
-    private float LScale;
+    private float LPosX, LPosY, LRotX, LRotY, LRotZ, LScale;
 
     // Variables de positionnement du bras droit
     private Vector3 RArmOrigin;
-    private float RPosX;
-    private float RPosY;
-    private float RRotX;
-    private float RRotY;
-    private float RRotZ;
-    private float RScale;
+    private float RPosX, RPosY, RRotX, RRotY, RRotZ, RScale;
 
-    private float lerpTimeL = 0.02f;
-    private float lerpTimeR = 0.02f;
-    private float lerpTimeRotation = 0.025f;
+    private float lerpTimeL = 0.16f;
+    private float lerpTimeR = 0.16f;
+    private float lerpTimeRotation = 0.208f;
 
     void Update()
     {
@@ -51,7 +38,7 @@ public class ArmTracking : MonoBehaviour
                 LRotZ = 136.8f;
                 LScale = -125f;
 
-                LArmOrigin = gameObject.transform.position;
+                LArmOrigin = transform.position;
             }
 
             if (!RArmGrapple)
@@ -64,7 +51,7 @@ public class ArmTracking : MonoBehaviour
                 RRotZ = -224f;
                 RScale = 150f;
 
-                RArmOrigin = gameObject.transform.position;
+                RArmOrigin = transform.position;
             }
         }
 
@@ -81,7 +68,7 @@ public class ArmTracking : MonoBehaviour
                 LRotZ = -32f;
                 LScale = 125f;
 
-                LArmOrigin = gameObject.transform.position;
+                LArmOrigin = transform.position;
             }
 
             if (!RArmGrapple)
@@ -94,7 +81,7 @@ public class ArmTracking : MonoBehaviour
                 RRotZ = -172f;
                 RScale = -150f;
 
-                RArmOrigin = gameObject.transform.position;
+                RArmOrigin = transform.position;
             }
         }
 
@@ -108,7 +95,7 @@ public class ArmTracking : MonoBehaviour
             // Angle du bras selon sa position par rapport au joueur
             // et la direction a laquelle le joueur fait face
             float LArmRotOffsetY;
-            if (LArm.position.x > gameObject.transform.position.x)
+            if (LArm.position.x > transform.position.x)
             {
                 LArmRotOffsetY = 90f;
             }
@@ -147,7 +134,7 @@ public class ArmTracking : MonoBehaviour
             // Angle du bras selon sa position par rapport au joueur
             // et la direction a laquelle le joueur fait face
             float RArmRotOffsetY;
-            if (RArm.position.x > gameObject.transform.position.x)
+            if (RArm.position.x > transform.position.x)
             {
                 RArmRotOffsetY = 90f;
             }
@@ -176,7 +163,10 @@ public class ArmTracking : MonoBehaviour
             RRotY = Quaternion.Euler(RDirection).y + RArmRotOffsetY;
             RRotZ = Quaternion.Euler(RDirection).z;
         }
+    }
 
+    private void FixedUpdate()
+    {
         if (!LAnchor)
         {
             // Positionnement du bras gauche
@@ -208,55 +198,87 @@ public class ArmTracking : MonoBehaviour
         }
     }
 
-    // Activation du grappin gauche
+    /**
+    * Activation du grappin gauche
+    * 
+    * @param void
+    * @returns void
+    */
     public void GrappleLArm()
     {
         LArmGrapple = true;
-        lerpTimeL = 0.015f;
+        lerpTimeL = 0.13f;
+
+        // Detacher le bras du joueur pour qu'il reste sur la souris
+        LArm.SetParent(null);
     }
 
+    /**
+    * Desactivation du grappin gauche
+    * 
+    * @param void
+    * @returns void
+    */
     public void StopGrappleLArm()
     {
         LArmGrapple = false;
         LAnchor = false;
-        lerpTimeL = 0.02f;
+        lerpTimeL = 0.16f;
 
         // Ratacher le bras au joueur pour qu'il le suive
-        LArm.SetParent(gameObject.transform);
+        LArm.SetParent(transform);
     }
 
-    // Statut ancre du grappin gauche
+    /**
+    * Changement vers le statut ancre du grappin gauche
+    * 
+    * @param void
+    * @returns void
+    */
     public void AnchorLArm()
     {
         LAnchor = true;
-
-        // Detacher le bras du joueur pour qu'il reste en place
-        LArm.SetParent(null);
     }
 
-    // Activation du grappin droit
+    /**
+    * Activation du grappin droit
+    * 
+    * @param void
+    * @returns void
+    */
     public void GrappleRArm()
     {
         RArmGrapple = true;
-        lerpTimeR = 0.015f;
+        lerpTimeR = 0.13f;
+
+        // Detacher le bras du joueur pour qu'il reste sur la souris
+        RArm.SetParent(null);
     }
 
+    /**
+    * Desactivation du grappin droit
+    * 
+    * @param void
+    * @returns void
+    */
     public void StopGrappleRArm()
     {
         RArmGrapple = false;
         RAnchor = false;
-        lerpTimeR = 0.02f;
+        lerpTimeR = 0.16f;
 
         // Ratacher le bras au joueur pour qu'il le suive
-        RArm.SetParent(gameObject.transform);
+        RArm.SetParent(transform);
     }
 
-    // Statut ancre du grappin droit
+    /**
+    * Changement vers le statut ancre du grappin droit
+    * 
+    * @param void
+    * @returns void
+    */
     public void AnchorRArm()
     {
         RAnchor = true;
-
-        // Detacher le bras du joueur pour qu'il reste en place
-        RArm.SetParent(null);
     }
 }

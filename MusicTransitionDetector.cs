@@ -27,6 +27,8 @@ public class MusicTransitionDetector : MonoBehaviour
                 mtManager.SwitchClipMuseum();
             }
         }
+        /*
+        // Pour une eventuelle continuation du jeu, cette musique sera necessaire
         else if (collision.CompareTag("SpotLight"))
         {
             if (mtManager.currentClip != mtManager.spotLight)
@@ -34,5 +36,6 @@ public class MusicTransitionDetector : MonoBehaviour
                 mtManager.SwitchClipSpotLight();
             }
         }
+        */
     }
 }
